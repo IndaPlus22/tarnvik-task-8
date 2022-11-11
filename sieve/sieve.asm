@@ -26,7 +26,7 @@ main:
     
     # initialise primes array
     la	    $t0,primes              # $s1 = address of the first element in the array
-    li 	    $t1,5
+    li 	    $t1,999
     li 	    $t2,0
     li	    $t3,1
 init_loop:
@@ -38,25 +38,25 @@ init_loop:
     ### Continue implementation of Sieve of Eratosthenes ###
 
 #I'm missing the code where I change the ones that aren't primes to 0 but hopefully I've done enough for komplettering 
-# I'm trying :(
+# I'm trying :(, please accept the 5 am commit as proof 
 
-#algorithm Sieve of Eratosthenes is
-#    input: an integer n > 1.
-#    output: all prime numbers from 2 through n.
-#
-#    let A be an array of Boolean values, indexed by integers 2 to n,
-#    initially all set to true.
-#    
-#    for i = 2, 3, 4, ..., not exceeding √n do
-#        if A[i] is true
-#            for j = i2, i2+i, i2+2i, i2+3i, ..., not exceeding n do
-#                set A[j] := false
-#
-#    return all i such that A[i] is true.
+    la $t0, primes #pointer 
+    addi $t0, $t0, -1
+    li $t1, 1 #index counter 
+    li $t2, 1
+    move $t3, $v0
+    addi $t3, $t3, +1
+loop_loop:
+    addi    $t0, $t0, 1             # increment pointer
+    addi    $t1, $t1, 1             # increment counter
+    lb $t4, 0($t0)
+    beq $t4, $t2, remove_loop
 
-    ### Print nicely to output stream ###
+    bne	    $t1, $t3, loop_loop     
+
+    ### Print (almost) nicely to output stream ###
     
-    la $t0, primes #index pointer 
+    la $t0, primes #pointer 
     addi $t0, $t0, -1
     li $t1, 1 #index counter 
     li $t2, 1
@@ -70,11 +70,18 @@ print_loop:
     
     continue: #I'm really bad at using return adress 
 
-    bne	    $t1, $t3, print_loop     # loop if counter != 999    
+    bne	    $t1, $t3, print_loop     # loop if counter != input(amount of numbers)
 
     # exit program
     j       exit_program
     nop
+
+
+remove_loop:
+    #something something
+    # if something something 
+        sb	$zero, ($t0)
+    #loop if something else go back to loop loop 
 
 print: 
    move	$a0, $t1
@@ -82,13 +89,6 @@ print:
    syscall
    
    j continue
-    #start index counter (i) at 2 
-    #start index pointer at adress of first element
-    #loop
-    #if a[i] = 1 
-    	#print counter 
-    #counter ++ 
-    #if counter != end index / input???, restart loop 
     
 invalid_input:
     # print error message
